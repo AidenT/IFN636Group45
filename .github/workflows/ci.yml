@@ -1,0 +1,67 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+
+#test
+jobs:
+  test:
+    name: Run Tests
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [22]
+
+
+    environment: MONGO_URI
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+      
+    - run: pm2 stop all # This errors if there are no pm2 processes running
+    # TODO: Handle the case where no PM2 processes are running by checking and starting the correct processes
+
+    - name: Install Backend Dependencies
+      working-directory: ./backend
+      run: | 
+       npm install --global yarn
+       yarn --version
+       yarn install
+       yarn run build
+      
+    - name: Install Frontend Dependencies
+      working-directory: ./frontend
+      run: |
+        df -h
+        sudo rm -rf ./build
+        yarn install
+        yarn run build
+
+
+    - name: Run Backend Tests
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        PORT: ${{ secrets.PORT }}
+      working-directory: ./backend
+      run: npm test
+
+
+    - run: npm ci
+    - run: | 
+        cd ./backend
+        touch .env
+        echo "${{ secrets.PROD }}" > .env
+
+    - run: pm2 start all
+
+    - run: pm2 restart all
