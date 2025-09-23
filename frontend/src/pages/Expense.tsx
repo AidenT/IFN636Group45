@@ -3,11 +3,11 @@ import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 import ExpenseForm from '../components/Expense/ExpenseForm';
 import ExpenseTable from '../components/Expense/ExpenseTable';
-import { IExpense } from '../../../backend/models/Expense';
-import { IAuthenticatedUser } from '../../../backend/models/User';
+import { IExpense } from '../types/expenseTypes';
+import { UserResponseData } from '../types/authTypes';
 
 const ExpensePage: React.FC = () => {
-  const { user }: { user: IAuthenticatedUser | null } = useAuth();
+  const { user }: { user: UserResponseData | null } = useAuth();
   const [expenses, setExpenses] = useState<IExpense[]>([]);
   const [editingExpense, setEditingExpense] = useState<IExpense | null>(null);
   const [loading, setLoading] = useState(true);

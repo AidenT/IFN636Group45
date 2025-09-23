@@ -1,48 +1,5 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
-
-// This is a duplicated const also in frontend/types until PFA-80 (User story 22 can be completed)
-export const EXPENSE_CATEGORIES = {
-    HOUSING: 'Housing',
-    TRANSPORTATION: 'Transportation',
-    FOOD: 'Food',
-    HEALTHCARE: 'Healthcare',
-    ENTERTAINMENT: 'Entertainment',
-    SHOPPING: 'Shopping',
-    BILLS: 'Bills',
-    EDUCATION: 'Education',
-    TRAVEL: 'Travel',
-    OTHER: 'Other'
-} as const;
-
-export const RECURRING_FREQUENCIES = {
-    WEEKLY: 'Weekly',
-    BI_WEEKLY: 'Bi-weekly',
-    MONTHLY: 'Monthly',
-    QUARTERLY: 'Quarterly',
-    YEARLY: 'Yearly'
-} as const;
-
-// Utility types
-export type ExpenseCategory = typeof EXPENSE_CATEGORIES[keyof typeof EXPENSE_CATEGORIES];
-export type RecurringFrequency = typeof RECURRING_FREQUENCIES[keyof typeof RECURRING_FREQUENCIES];
-
-export interface BaseExpense {
-    amount: number;
-    dateSpent: Date | string; // Allow both Date and string for API compatibility
-    description?: string;
-    category: ExpenseCategory;
-    merchant?: string;
-    isRecurring: boolean;
-    recurringFrequency?: RecurringFrequency;
-    startDate?: Date | string; // Allow both Date and string for API compatibility
-}
-
-// Mongoose Document interface for Expense
-export interface IExpense extends Document, BaseExpense {
-    userId: mongoose.Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { IExpense, EXPENSE_CATEGORIES, RECURRING_FREQUENCIES } from '../types/expenseTypes';
+import mongoose, { Schema, Model } from 'mongoose';
 
 const expenseSchema = new Schema<IExpense>({
     userId: { 

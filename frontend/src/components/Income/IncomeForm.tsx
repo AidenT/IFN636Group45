@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import axiosInstance from '../../axiosConfig';
-import { IIncome } from '../../../../backend/models/Income';
-import { IAuthenticatedUser } from '../../../../backend/models/User';
-import { IncomeFormData } from '../../types/income';
+import { UserResponseData } from '../../types/authTypes';
+import { IIncome, IncomeFormData } from '../../types/incomeTypes';
 
 interface IncomeFormProps {
   incomes: IIncome[];
@@ -13,7 +12,7 @@ interface IncomeFormProps {
 }
 
 const IncomeForm: React.FC<IncomeFormProps> = ({ incomes, setIncomes, editingIncome, setEditingIncome }) => {
-  const { user }: { user: IAuthenticatedUser | null } = useAuth();
+  const { user }: { user: UserResponseData | null } = useAuth();
   const [formData, setFormData] = useState<IncomeFormData>({ 
     amount: '',
     dateEarned: new Date().toISOString().split('T')[0], // Today's date

@@ -5,7 +5,8 @@
   "scripts": {
     "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
     "start": "concurrently \"npm run prod --prefix backend\" \"npm start --prefix frontend\"",
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\""
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
+    "sync-types": "node sync-types.js"
   },
   "devDependencies": {
     "@types/chai": "^5.2.2",
@@ -19,6 +20,7 @@
   "author": "Personal Finance Tracker Team",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.18.2"
   }
 }

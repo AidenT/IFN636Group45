@@ -1,40 +1,6 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
+import { IUser, IUserSafe } from '../types/userTypes';
 import bcrypt from 'bcrypt';
-
-// TypeScript interface for the User document
-export interface IUser extends Document {
-    name: string;
-    email: string;
-    password: string;
-    university?: string;
-    address?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-// TypeScript interface for creating new user (without document methods)
-export interface IUserCreate {
-    name: string;
-    email: string;
-    password: string;
-    university?: string;
-    address?: string;
-}
-
-// TypeScript interface for user without sensitive data (for responses)
-export interface IUserSafe {
-    _id: string;
-    name: string;
-    email: string;
-    university?: string;
-    address?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface IAuthenticatedUser extends IUser {
-    token: string;
-}
 
 // Mongoose schema definition
 const userSchema = new Schema<IUser>({
