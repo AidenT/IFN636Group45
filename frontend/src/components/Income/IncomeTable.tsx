@@ -1,5 +1,5 @@
 import React from 'react';
-import { IIncome } from '../../../../backend/models/Income';
+import { IIncome } from '../../types/incomeTypes';
 import {
   Table,
   TableBody,
@@ -32,7 +32,7 @@ const IncomeTable: React.FC<IncomeTableProps> = ({
           </div>
         )}
       </div>
-      
+
       {loading ? (
         <div className="text-center py-4">Loading incomes...</div>
       ) : incomes.length === 0 ? (
@@ -56,7 +56,7 @@ const IncomeTable: React.FC<IncomeTableProps> = ({
             <TableBody>
               {incomes.map((income) => (
                 <TableRow
-                  key={income._id}
+                  key={income._id as string} //This is a copilot hack, probably needs to be looked at.
                   className="hover:bg-gray-50 cursor-pointer"
                   onClick={() => onEdit(income)}
                 >
@@ -97,7 +97,7 @@ const IncomeTable: React.FC<IncomeTableProps> = ({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onDelete(income._id);
+                          onDelete(income._id as string); //This is a copilot typing hack, probably needs to be looked at.
                         }}
                         className="text-red-600 hover:text-red-800 text-sm"
                       >

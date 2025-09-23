@@ -1,16 +1,3 @@
-/**
- * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
- * 
- * This file was automatically generated from: shared/types/authTypes.ts
- * Generated on: 2025-09-23T01:23:57.908Z
- * 
- * To make changes:
- * 1. Edit the source file: shared/types/authTypes.ts
- * 2. Run: npm run sync-types
- * 
- * Any direct edits to this file will be lost when types are synchronized!
- */
-
 // @Shared
 // Auth-related types - Used by both frontend and backend
 export interface UserData {

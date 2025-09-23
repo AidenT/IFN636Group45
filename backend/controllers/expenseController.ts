@@ -1,4 +1,5 @@
-import Expense, { IExpense } from '../models/Expense';
+import Expense from '../models/Expense';
+import { IExpense, ExpenseData } from '../types/expenseTypes';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
 import { CreateExpenseRequest, UpdateExpenseRequest } from '../types/expenseTypes'
 
@@ -69,8 +70,8 @@ const addExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Prom
             return;
         }
 
-        const expenseData = {
-            userId: req.user?._id,
+        const expenseData: ExpenseData = {
+            userId: req.user?._id ?? '',
             amount,
             dateSpent: dateSpent || new Date(),
             description,
@@ -78,7 +79,8 @@ const addExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Prom
             merchant,
             isRecurring: isRecurring || false,
             ...(isRecurring && { recurringFrequency }),
-            ...(isRecurring && { startDate })
+            ...(isRecurring && { startDate }),
+            createdAt: new Date()
         };
 
         const expense: IExpense = await Expense.create(expenseData);

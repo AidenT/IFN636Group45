@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
+import { EXPENSE_CATEGORIES, IExpense } from '../../types/expenseTypes';
 import {
   Table,
   TableBody,
@@ -7,8 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from '../ui/table';
-import { IExpense } from '../../../../backend/models/Expense';
-import { EXPENSE_CATEGORIES } from '../../types/expense';
 
 interface ExpenseTableProps {
   expenses: IExpense[];
@@ -78,12 +77,12 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
           )}
         </div>
       </div>
-      
+
       {loading ? (
         <div className="text-center py-4">Loading expenses...</div>
       ) : filteredExpenses.length === 0 ? (
         <div className="text-center py-4 text-gray-500">
-          {selectedCategory === 'all' 
+          {selectedCategory === 'all'
             ? 'No expense records found. Add your first expense entry!'
             : `No expenses found for category "${selectedCategory}". Try selecting a different category.`
           }
@@ -105,7 +104,7 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
             <TableBody>
               {filteredExpenses.map((expense) => (
                 <TableRow
-                  key={expense._id}
+                  key={expense._id as string} //This is a copilot hack, probably needs to be looked at.
                   className="hover:bg-gray-50 cursor-pointer"
                   onClick={() => onEdit(expense)}
                 >
@@ -146,7 +145,7 @@ const ExpenseTable: React.FC<ExpenseTableProps> = ({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onDelete(expense._id);
+                          onDelete(expense._id as string); //This is a copilot typing hack, probably needs to be looked at.
                         }}
                         className="text-red-600 hover:text-red-800 text-sm"
                       >

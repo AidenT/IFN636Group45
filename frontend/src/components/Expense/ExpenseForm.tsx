@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from 'react';
 import axiosInstance from '../../axiosConfig';
-import { IExpense } from '../../../../backend/models/Expense';
-import { IAuthenticatedUser } from '../../../../backend/models/User';
-import { EXPENSE_CATEGORIES, RECURRING_FREQUENCIES, ExpenseFormData } from '../../types/expense';
+import { useAuth } from '../../context/AuthContext';
+import { UserResponseData } from '../../types/authTypes';
+import { EXPENSE_CATEGORIES, ExpenseFormData, IExpense, RECURRING_FREQUENCIES } from '../../types/expenseTypes';
 
 interface ExpenseFormProps {
   expenses: IExpense[];
@@ -13,8 +12,8 @@ interface ExpenseFormProps {
 }
 
 const ExpenseForm: React.FC<ExpenseFormProps> = ({ expenses, setExpenses, editingExpense, setEditingExpense }) => {
-  const { user }: { user: IAuthenticatedUser | null } = useAuth();
-  const [formData, setFormData] = useState<ExpenseFormData>({ 
+  const { user }: { user: UserResponseData | null } = useAuth();
+  const [formData, setFormData] = useState<ExpenseFormData>({
     amount: '',
     dateSpent: new Date().toISOString().split('T')[0], // Today's date
     description: '',
@@ -38,7 +37,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ expenses, setExpenses, editin
         startDate: editingExpense.startDate ? editingExpense.startDate.toString().split('T')[0] : undefined
       });
     } else {
-      setFormData({ 
+      setFormData({
         amount: '',
         dateSpent: new Date().toISOString().split('T')[0],
         description: '',
@@ -53,7 +52,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ expenses, setExpenses, editin
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    
+
     if (!user?.token) {
       alert('User not authenticated');
       return;
@@ -100,7 +99,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ expenses, setExpenses, editin
         setExpenses([...expenses, response.data]);
       }
       setEditingExpense(null);
-      setFormData({ 
+      setFormData({
         amount: '',
         dateSpent: new Date().toISOString().split('T')[0],
         description: '',
@@ -265,8 +264,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({ expenses, setExpenses, editin
         </div>
       )}
 
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700 transition-colors disabled:bg-gray-400"
         disabled={!user?.token}
       >

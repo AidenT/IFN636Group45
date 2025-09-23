@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/authTypes.ts
- * Generated on: 2025-09-23T01:23:57.908Z
+ * Generated on: 2025-09-23T01:23:57.907Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/authTypes.ts

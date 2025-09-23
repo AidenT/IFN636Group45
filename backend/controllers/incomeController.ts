@@ -1,4 +1,5 @@
-import Income, { IIncome } from '../models/Income';
+import Income from '../models/Income';
+import { IIncome } from '../types/incomeTypes';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
 import { 
     CreateIncomeRequest, 
