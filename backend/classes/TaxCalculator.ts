@@ -5,6 +5,32 @@ interface TaxBracket {
     taxRate: number;
 }
 
+class TaxBracketIterator {
+    private brackets: TaxBracket[];
+    private currentIndex: number = 0;
+
+    constructor(brackets: TaxBracket[]) {
+        this.brackets = brackets;
+    }
+
+    hasNext(): boolean {
+        return this.currentIndex < this.brackets.length;
+    }
+
+    next(): TaxBracket | null {
+        if (this.hasNext()) {
+            const currentBracket = this.brackets[this.currentIndex];
+            this.currentIndex++;
+            return currentBracket;
+        }
+        return null;
+    }
+
+    reset(): void {
+        this.currentIndex = 0;
+    }
+}
+
 class TaxCalculator {
     protected static getTaxBrackets(): TaxBracket[] {
         return [
@@ -17,10 +43,12 @@ class TaxCalculator {
 
     protected static getTaxRateForIncome(grossIncome: number): number {
         const taxBrackets = this.getTaxBrackets();
+        const interator = new TaxBracketIterator(taxBrackets);
         let taxPercentage = 0;
         
-        for (const bracket of taxBrackets) {
-            if (grossIncome <= bracket.maxIncome) {
+        while (interator.hasNext()){
+            const bracket = interator.next();
+            if(bracket && grossIncome <= bracket.maxIncome){
                 taxPercentage = bracket.taxRate;
                 break;
             }
