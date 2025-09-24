@@ -8,7 +8,7 @@ import ExpensePage from './pages/Expense';
 import HomePage from './pages/Home';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ComingSoon from './pages/ComingSoon';
-
+import TaxPage from './pages/Tax';
 
 
 
@@ -27,6 +27,7 @@ function AppContent() {
         <Route path="/comingSoon" element={<ComingSoon />} />
         <Route path="/income" element={<IncomePage />} />
         <Route path="/expense" element={<ExpensePage />} />
+        <Route path="/tax" element={<TaxPage />} />
       </Routes>
     </Router>
   );
