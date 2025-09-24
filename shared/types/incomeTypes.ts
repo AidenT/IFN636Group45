@@ -31,6 +31,8 @@ export interface BaseIncome {
     isRecurring: boolean;
     recurringFrequency?: RecurringFrequency;
     startDate?: Date;
+    isTaxPaid?: boolean;
+    tax?: number;
 }
 
 // Income form data (for frontend forms)

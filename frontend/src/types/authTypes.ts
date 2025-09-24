@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/authTypes.ts
- * Generated on: 2025-09-23T01:23:57.907Z
+ * Generated on: 2025-09-24T01:19:06.872Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/authTypes.ts
@@ -13,6 +13,8 @@
 
 // @Shared
 // Auth-related types - Used by both frontend and backend
+import { Country } from './globalTypes';
+
 export interface UserData {
     _id?: string;
     id?: string;
@@ -21,6 +23,7 @@ export interface UserData {
     password?: string;
     university?: string;
     address?: string;
+    country?: Country;
     createdAt?: Date;
     updatedAt?: Date;
     save?: () => Promise<UserData>;

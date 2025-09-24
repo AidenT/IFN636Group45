@@ -10,6 +10,7 @@ import {
 import IncomeMenuContent from './IncomeMenuContent';
 import FinancialGoalsMenuContent from './FinancialGoalsMenuContent';
 import SettingsMenuContent from './SettingsMenuContent';
+import TaxCalculationMenuContent from './TaxCalculationMenuContent';
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -33,6 +34,13 @@ const Navbar = () => {
             <NavigationMenuTrigger>Financial Goals</NavigationMenuTrigger>
             <NavigationMenuContent className='bg-white p-4 rounded-md shadow-sm'>
               <FinancialGoalsMenuContent />
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Tax Calculation</NavigationMenuTrigger>
+            <NavigationMenuContent className='bg-white p-4 rounded-md shadow-sm'>
+              <TaxCalculationMenuContent />
             </NavigationMenuContent>
           </NavigationMenuItem>
 
