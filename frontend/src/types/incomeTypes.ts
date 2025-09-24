@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/incomeTypes.ts
- * Generated on: 2025-09-23T01:23:57.911Z
+ * Generated on: 2025-09-24T01:19:06.879Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/incomeTypes.ts
@@ -44,6 +44,8 @@ export interface BaseIncome {
     isRecurring: boolean;
     recurringFrequency?: RecurringFrequency;
     startDate?: Date;
+    isTaxPaid?: boolean;
+    tax?: number;
 }
 
 // Income form data (for frontend forms)

@@ -1,5 +1,7 @@
 // @Shared
 // Auth-related types - Used by both frontend and backend
+import { Country } from './globalTypes';
+
 export interface UserData {
     _id?: string;
     id?: string;
@@ -8,6 +10,7 @@ export interface UserData {
     password?: string;
     university?: string;
     address?: string;
+    country?: Country;
     createdAt?: Date;
     updatedAt?: Date;
     save?: () => Promise<UserData>;

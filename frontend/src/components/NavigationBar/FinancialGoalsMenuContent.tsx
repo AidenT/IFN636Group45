@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { NavigationMenuLink } from './navigation-menu';
 
-const IncomeMenuContent = () => {
+const FinancialGoalsMenuContent = () => {
   return (
       <ul className="grid w-[300px] gap-4 ">
               <li>
@@ -26,4 +26,4 @@ const IncomeMenuContent = () => {
   );
 };
 
-export default IncomeMenuContent;
+export default FinancialGoalsMenuContent;
