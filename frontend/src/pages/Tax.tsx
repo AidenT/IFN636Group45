@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
+import { UserResponseData } from '../types/authTypes';
 
 interface TaxRecord {
   _id?: string;
@@ -20,23 +21,27 @@ interface TaxData {
 }
 
 const TaxPage: React.FC = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user }: { user: UserResponseData | null } = useAuth();
   const [taxData, setTaxData] = useState<TaxData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (user) {
       fetchTaxData();
     }
-  }, [isAuthenticated, user]);
+  }, [user]);
 
   const fetchTaxData = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      const response = await axiosInstance.get('/api/tax');
+      const response = await axiosInstance.get('/api/tax', {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
       const data = response.data;
       
       // Transform the data to include type information
@@ -80,7 +85,7 @@ const TaxPage: React.FC = () => {
     return records.reduce((total, record) => total + record.amount, 0);
   };
 
-  if (!isAuthenticated) {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">

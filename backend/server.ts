@@ -5,6 +5,7 @@ import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
 import incomeRoutes from './routes/incomeRoutes';
 import expenseRoutes from './routes/expenseRoutes';
+import taxRoutes from './routes/taxRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/income', incomeRoutes);
 app.use('/api/expense', expenseRoutes);
+app.use('/api/tax', taxRoutes);
 
 // Define the port type
 const PORT: number = parseInt(process.env.PORT || '5001', 10);
