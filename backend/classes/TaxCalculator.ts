@@ -34,10 +34,10 @@ class TaxBracketIterator {
 class TaxCalculator {
     protected static getTaxBrackets(): TaxBracket[] {
         return [
-            { maxIncome: 9875, taxRate: 0.10 },      // 10% up to $9,875
-            { maxIncome: 40125, taxRate: 0.12 },     // 12% from $9,876 to $40,125
-            { maxIncome: 85525, taxRate: 0.22 },     // 22% from $40,126 to $85,525
-            { maxIncome: Infinity, taxRate: 0.24 }   // 24% above $85,525
+            { maxIncome: 9875, taxRate: 0.10 },
+            { maxIncome: 40125, taxRate: 0.12 },
+            { maxIncome: 85525, taxRate: 0.22 },
+            { maxIncome: Infinity, taxRate: 0.24 }
         ];
     }
 
@@ -70,10 +70,10 @@ class TaxCalculator {
 class AustralianTaxCalculator extends TaxCalculator {
     protected static getTaxBrackets(): TaxBracket[] {
         return [
-            { maxIncome: 18200, taxRate: 0.00 },     // Tax-free threshold up to $18,200
-            { maxIncome: 45000, taxRate: 0.19 },     // 19% from $18,201 to $45,000
-            { maxIncome: 120000, taxRate: 0.325 },   // 32.5% from $45,001 to $120,000
-            { maxIncome: Infinity, taxRate: 0.37 }   // 37% above $120,000
+            { maxIncome: 18200, taxRate: 0.00 },
+            { maxIncome: 45000, taxRate: 0.19 },
+            { maxIncome: 120000, taxRate: 0.325 },
+            { maxIncome: Infinity, taxRate: 0.37 }
         ];
     }
 
