@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
+import { Country } from '../types/globalTypes';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', country: '' });
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -42,6 +43,18 @@ const Register = () => {
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         />
+        <select
+          value={formData.country}
+          onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+          className="w-full mb-4 p-2 border rounded"
+        >
+          {!formData.country && <option value="" disabled>Select Country</option>}
+          {Object.values(Country).map((country) => (
+            <option key={country} value={country}>
+              {country}
+            </option>
+          ))}
+        </select>
         <button type="submit" className="w-full bg-green-600 text-white p-2 rounded">
           Register
         </button>

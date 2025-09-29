@@ -1,6 +1,7 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { IUser, IUserSafe } from '../types/userTypes';
 import bcrypt from 'bcrypt';
+import { Country } from '../types/globalTypes';
 
 // Mongoose schema definition
 const userSchema = new Schema<IUser>({
@@ -17,8 +18,10 @@ const userSchema = new Schema<IUser>({
         type: String, 
         required: true 
     },
-    university: { 
-        type: String 
+    country: { 
+        type: String, 
+        required: true,
+        enum: Object.values(Country) 
     },
     address: { 
         type: String 

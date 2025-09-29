@@ -152,7 +152,7 @@ describe('Auth Controller Tests - JavaScript/TypeScript Compatible', () => {
             const mockUserData = {
                 name: 'John Doe',
                 email: 'john@example.com',
-                university: 'Test University',
+                country: 'Australia',
                 address: '123 Test Street'
             };
 
@@ -166,7 +166,7 @@ describe('Auth Controller Tests - JavaScript/TypeScript Compatible', () => {
             expect(jsonStub.calledWith({
                 name: 'John Doe',
                 email: 'john@example.com',
-                university: 'Test University',
+                country: 'Australia',
                 address: '123 Test Street'
             })).to.be.true;
         });

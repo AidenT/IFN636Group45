@@ -30,7 +30,7 @@ const generateToken = (id: string): string => {
 };
 
 const registerUser = async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
-    const { name, email, password }: RegisterRequest = req.body;
+    const { name, email, password, country }: RegisterRequest = req.body;
     try {
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -38,7 +38,7 @@ const registerUser = async (req: ExpressRequest, res: ExpressResponse): Promise<
             return;
         }
 
-        const user: IUser = await User.create({ name, email, password });
+        const user: IUser = await User.create({ name, email, password, country });
         const response: UserResponseData = {
             id: user._id.toString(), 
             name: user.name, 
