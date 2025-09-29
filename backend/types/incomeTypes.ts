@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/incomeTypes.ts
- * Generated on: 2025-09-24T01:19:06.879Z
+ * Generated on: 2025-09-29T22:16:44.818Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/incomeTypes.ts

@@ -7,9 +7,8 @@ import { IExpense } from '../types/expenseTypes';
 import { Country } from '../types/globalTypes';
 import { IIncome } from '../types/incomeTypes';
 
-
-const getTax = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
-    try {
+class TaxHandler {
+    async getTaxRecords(req: AuthenticatedRequest) {
         const incomes = await getIncomeRecordsForUsersFinancialYear(req.user?._id!, req.user?.country);
         const expenses = await getExpenseRecordsForUsersFinancialYear(req.user?._id!, req.user?.country);
 
@@ -18,25 +17,26 @@ const getTax = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<
 
         const grossIncome = incomes.reduce((total, income) => total + income.amount, 0);
 
-        incomes.forEach((income, index) => {
-            if (!incomes[index].isTaxPaid) {
-                incomes[index].tax = taxCalculator.calculateIncomeTax(income.amount, grossIncome);
+        incomes.forEach((income) => {
+            if (!income.isTaxPaid) {
+                income.tax = taxCalculator.calculateIncomeTax(income.amount, grossIncome);
             }
         });
+        return { incomes, expenses };
+    }
+}
+
+const getTax = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
+    try {
+        const taxHandler = new TaxHandler();
+        const { incomes, expenses } = await taxHandler.getTaxRecords(req);
         res.json({ incomes, expenses });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
 
-/**
- * Get income records for the user's current financial year
- * @param userId - The user's ID
- * @param country - The user's country (defaults to Australia)
- * @returns Promise<IIncome[]> - Array of income records for the financial year
- */
 const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IIncome[]> => {
-    // Get financial year calculator based on user's country (defaults to Australia)
     const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
     const financialYear = financialYearCalculator.getFinancialYear();
 
@@ -52,14 +52,7 @@ const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: C
     return incomes;
 };
 
-/**
- * Get expense records for the user's current financial year
- * @param userId - The user's ID
- * @param country - The user's country (defaults to Australia)
- * @returns Promise<IExpense[]> - Array of expense records for the financial year
- */
 const getExpenseRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IExpense[]> => {
-    // Get financial year calculator based on user's country (defaults to Australia)
     const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
     const financialYear = financialYearCalculator.getFinancialYear();
 
