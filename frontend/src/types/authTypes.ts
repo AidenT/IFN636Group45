@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/authTypes.ts
- * Generated on: 2025-09-24T01:19:06.872Z
+ * Generated on: 2025-09-29T22:16:44.811Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/authTypes.ts
@@ -21,7 +21,6 @@ export interface UserData {
     name: string;
     email: string;
     password?: string;
-    university?: string;
     address?: string;
     country?: Country;
     createdAt?: Date;
@@ -33,7 +32,7 @@ export interface UserResponseData {
     id: string;
     name: string;
     email: string;
-    university?: string;
+    country?: Country;
     address?: string;
     token: string;
 }
@@ -63,7 +62,7 @@ export interface RegisterRequest {
     name: string;
     email: string;
     password: string;
-    university?: string;
+    country: Country;
     address?: string;
 }
 
@@ -75,7 +74,7 @@ export interface LoginRequest {
 export interface UpdateProfileRequest {
     name?: string;
     email?: string;
-    university?: string;
+    country?: Country;
     address?: string;
 }
 
