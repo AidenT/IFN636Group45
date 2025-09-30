@@ -8,7 +8,6 @@ export interface UserData {
     name: string;
     email: string;
     password?: string;
-    university?: string;
     address?: string;
     country?: Country;
     createdAt?: Date;
@@ -20,7 +19,7 @@ export interface UserResponseData {
     id: string;
     name: string;
     email: string;
-    university?: string;
+    country?: Country;
     address?: string;
     token: string;
 }
@@ -50,7 +49,7 @@ export interface RegisterRequest {
     name: string;
     email: string;
     password: string;
-    university?: string;
+    country: Country;
     address?: string;
 }
 
@@ -62,7 +61,7 @@ export interface LoginRequest {
 export interface UpdateProfileRequest {
     name?: string;
     email?: string;
-    university?: string;
+    country?: Country;
     address?: string;
 }
 

@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/expenseTypes.ts
- * Generated on: 2025-09-24T01:19:06.875Z
+ * Generated on: 2025-09-29T22:16:44.814Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/expenseTypes.ts

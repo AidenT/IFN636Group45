@@ -9,12 +9,13 @@ import {
     UpdateProfileRequest,
     ExpressResponse
 } from '../types/authTypes';
+import { Country } from '../types/globalTypes';
 
 interface ProfileResponseData {
     name: string;
     email: string;
-    university?: string;
     address?: string;
+    country?: Country;
 }
 
 interface ExpressRequest {
@@ -29,7 +30,7 @@ const generateToken = (id: string): string => {
 };
 
 const registerUser = async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
-    const { name, email, password }: RegisterRequest = req.body;
+    const { name, email, password, country }: RegisterRequest = req.body;
     try {
         const userExists = await User.findOne({ email });
         if (userExists) {
@@ -37,7 +38,7 @@ const registerUser = async (req: ExpressRequest, res: ExpressResponse): Promise<
             return;
         }
 
-        const user: IUser = await User.create({ name, email, password });
+        const user: IUser = await User.create({ name, email, password, country });
         const response: UserResponseData = {
             id: user._id.toString(), 
             name: user.name, 
@@ -81,7 +82,6 @@ const getProfile = async (req: ExpressRequest, res: ExpressResponse): Promise<vo
         const response: ProfileResponseData = {
             name: user.name,
             email: user.email,
-            university: user.university,
             address: user.address,
         };
         res.status(200).json(response);
@@ -98,18 +98,17 @@ const updateUserProfile = async (req: ExpressRequest, res: ExpressResponse): Pro
             return;
         }
 
-        const { name, email, university, address }: UpdateProfileRequest = req.body;
+        const { name, email, address, country }: UpdateProfileRequest = req.body;
         user.name = name || user.name;
         user.email = email || user.email;
-        user.university = university || user.university;
         user.address = address || user.address;
+        user.country = country || user.country;
 
         const updatedUser: IUser = await user.save();
         const response: UserResponseData = {
             id: updatedUser._id.toString(), 
             name: updatedUser.name, 
             email: updatedUser.email, 
-            university: updatedUser.university, 
             address: updatedUser.address, 
             token: generateToken(updatedUser._id.toString()) 
         };
