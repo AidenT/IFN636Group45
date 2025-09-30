@@ -38,7 +38,7 @@ const getTax = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<
 
 const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IIncome[]> => {
     const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
-    const financialYear = financialYearCalculator.getFinancialYear();
+    const financialYear = financialYearCalculator.getFinancialYear(new Date()); // Extensible for different dates by passing through an argument
 
     // Get all incomes for this financial year
     const incomes: IIncome[] = await Income.find({
@@ -54,7 +54,7 @@ const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: C
 
 const getExpenseRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IExpense[]> => {
     const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
-    const financialYear = financialYearCalculator.getFinancialYear();
+    const financialYear = financialYearCalculator.getFinancialYear(new Date()); // Extensible for different dates by passing through an argument
 
     // Get all expenses for this financial year
     const expenses: IExpense[] = await Expense.find({
