@@ -1,10 +1,10 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { IUser, IUserSafe } from '../types/userTypes';
 import bcrypt from 'bcrypt';
 import { Country } from '../types/globalTypes';
+import { IUserDocument, IUserSafeDocument } from '../types/backendUserTypes';
 
 // Mongoose schema definition
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUserDocument>({
     name: { 
         type: String, 
         required: true 
@@ -44,7 +44,7 @@ userSchema.methods.comparePassword = async function(candidatePassword: string): 
 };
 
 // Instance method to get safe user data (without password)
-userSchema.methods.toSafeObject = function(): IUserSafe {
+userSchema.methods.toSafeObject = function(): IUserSafeDocument {
     const userObject = this.toObject();
     delete userObject.password;
     return userObject;
@@ -60,13 +60,13 @@ userSchema.statics.findByEmailExcludePassword = function(email: string) {
 };
 
 // Define the model interface with static methods
-interface IUserModel extends Model<IUser> {
-    findByEmail(email: string): Promise<IUser | null>;
-    findByEmailExcludePassword(email: string): Promise<IUser | null>;
+interface IUserModel extends Model<IUserDocument> {
+    findByEmail(email: string): Promise<IUserDocument | null>;
+    findByEmailExcludePassword(email: string): Promise<IUserDocument | null>;
 }
 
 // Create and export the model
-const User: IUserModel = mongoose.model<IUser, IUserModel>('User', userSchema);
+const User: IUserModel = mongoose.model<IUserDocument, IUserModel>('User', userSchema);
 
 // Export the model
 export default User;

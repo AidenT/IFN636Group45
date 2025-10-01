@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/globalTypes.ts
- * Generated on: 2025-10-01T01:39:44.335Z
+ * Generated on: 2025-10-01T01:54:22.519Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/globalTypes.ts

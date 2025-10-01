@@ -1,5 +1,5 @@
 import User from '../models/User';
-import { IUser } from '../types/userTypes';
+import { IUserDocument } from '../types/backendUserTypes';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { 
@@ -38,7 +38,7 @@ const registerUser = async (req: ExpressRequest, res: ExpressResponse): Promise<
             return;
         }
 
-        const user: IUser = await User.create({ name, email, password, country });
+        const user: IUserDocument = await User.create({ name, email, password, country });
         const response: UserResponseData = {
             id: user._id.toString(), 
             name: user.name, 
@@ -54,7 +54,7 @@ const registerUser = async (req: ExpressRequest, res: ExpressResponse): Promise<
 const loginUser = async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
     const { email, password }: LoginRequest = req.body;
     try {
-        const user: IUser | null = await User.findOne({ email });
+        const user: IUserDocument | null = await User.findOne({ email });
         if (user && (await bcrypt.compare(password, user.password as string))) {
             const response: UserResponseData = {
                 id: user._id.toString(), 
@@ -73,7 +73,7 @@ const loginUser = async (req: ExpressRequest, res: ExpressResponse): Promise<voi
 
 const getProfile = async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
     try {
-        const user: IUser | null = await User.findById(req.user?.id);
+        const user: IUserDocument | null = await User.findById(req.user?.id);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -93,7 +93,7 @@ const getProfile = async (req: ExpressRequest, res: ExpressResponse): Promise<vo
 
 const updateUserProfile = async (req: ExpressRequest, res: ExpressResponse): Promise<void> => {
     try {
-        const user: IUser | null = await User.findById(req.user?.id);
+        const user: IUserDocument | null = await User.findById(req.user?.id);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
@@ -105,7 +105,7 @@ const updateUserProfile = async (req: ExpressRequest, res: ExpressResponse): Pro
         user.address = address || user.address;
         user.country = country || user.country;
 
-        const updatedUser: IUser = await user.save();
+        const updatedUser: IUserDocument = await user.save();
         const response: UserResponseData = {
             id: updatedUser._id.toString(), 
             name: updatedUser.name, 
