@@ -1,11 +1,11 @@
 import Expense from '../models/Expense';
-import { IExpense, ExpenseData } from '../types/expenseTypes';
+import { IExpenseDocument, ExpenseData } from '../types/expenseTypes';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
 import { CreateExpenseRequest, UpdateExpenseRequest } from '../types/expenseTypes'
 
 const getExpenses = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {
-        const expenses: IExpense[] = await Expense.find({ userId: req.user?._id }).sort({ dateSpent: -1 });
+        const expenses: IExpenseDocument[] = await Expense.find({ userId: req.user?._id }).sort({ dateSpent: -1 });
         res.json(expenses);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -14,7 +14,7 @@ const getExpenses = async (req: AuthenticatedRequest, res: ExpressResponse): Pro
 
 const getExpenseById = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {
-        const expense: IExpense | null = await Expense.findById(req.params.id);
+        const expense: IExpenseDocument | null = await Expense.findById(req.params.id);
         if (!expense) {
             res.status(404).json({ message: 'Expense not found' });
             return;
@@ -83,7 +83,7 @@ const addExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Prom
             createdAt: new Date()
         };
 
-        const expense: IExpense = await Expense.create(expenseData);
+        const expense: IExpenseDocument = await Expense.create(expenseData);
         res.status(201).json(expense);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -103,7 +103,7 @@ const updateExpense = async (req: AuthenticatedRequest, res: ExpressResponse): P
     }: UpdateExpenseRequest = req.body;
 
     try {
-        const expense: IExpense | null = await Expense.findById(req.params.id);
+        const expense: IExpenseDocument | null = await Expense.findById(req.params.id);
         if (!expense) {
             res.status(404).json({ message: 'Expense not found' });
             return;
@@ -135,7 +135,7 @@ const updateExpense = async (req: AuthenticatedRequest, res: ExpressResponse): P
             expense.startDate = undefined;
         }
 
-        const updatedExpense: IExpense = await expense.save();
+        const updatedExpense: IExpenseDocument = await expense.save();
         res.json(updatedExpense);
     } catch (error: any) {
         res.status(500).json({ message: error.message });

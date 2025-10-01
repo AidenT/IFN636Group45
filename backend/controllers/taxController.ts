@@ -3,9 +3,9 @@ import { TaxCalculatorFactory } from '../classes/TaxCalculator';
 import Expense from '../models/Expense';
 import Income from '../models/Income';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
-import { IExpense } from '../types/expenseTypes';
+import { IExpenseDocument } from '../types/expenseTypes';
 import { Country } from '../types/globalTypes';
-import { IIncome } from '../types/incomeTypes';
+import { IIncomeDocument } from '../types/incomeTypes';
 
 class TaxHandler {
     async getTaxRecords(req: AuthenticatedRequest) {
@@ -36,12 +36,12 @@ const getTax = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<
     }
 };
 
-const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IIncome[]> => {
+const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IIncomeDocument[]> => {
     const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
     const financialYear = financialYearCalculator.getFinancialYear(new Date()); // Extensible for different dates by passing through an argument
 
     // Get all incomes for this financial year
-    const incomes: IIncome[] = await Income.find({
+    const incomes: IIncomeDocument[] = await Income.find({
         userId: userId,
         dateEarned: {
             $gte: financialYear.start,
@@ -52,12 +52,12 @@ const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: C
     return incomes;
 };
 
-const getExpenseRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IExpense[]> => {
+const getExpenseRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IExpenseDocument[]> => {
     const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
     const financialYear = financialYearCalculator.getFinancialYear(new Date()); // Extensible for different dates by passing through an argument
 
     // Get all expenses for this financial year
-    const expenses: IExpense[] = await Expense.find({
+    const expenses: IExpenseDocument[] = await Expense.find({
         userId: userId,
         dateSpent: {
             $gte: financialYear.start,

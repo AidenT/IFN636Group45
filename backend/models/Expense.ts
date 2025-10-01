@@ -1,7 +1,7 @@
-import { IExpense, EXPENSE_CATEGORIES, RECURRING_FREQUENCIES } from '../types/expenseTypes';
+import { IExpenseDocument, EXPENSE_CATEGORIES, RECURRING_FREQUENCIES } from '../types/expenseTypes';
 import mongoose, { Schema, Model } from 'mongoose';
 
-const expenseSchema = new Schema<IExpense>({
+const expenseSchema = new Schema<IExpenseDocument>({
     userId: { 
         type: Schema.Types.ObjectId, 
         ref: 'User', 
@@ -36,13 +36,13 @@ const expenseSchema = new Schema<IExpense>({
     recurringFrequency: { 
         type: String,
         enum: Object.values(RECURRING_FREQUENCIES),
-        required: function(this: IExpense) {
+        required: function(this: IExpenseDocument) {
             return this.isRecurring;
         }
     },
-    startDate: { 
+    startDate: {
         type: Date,
-        required: function(this: IExpense) {
+        required: function(this: IExpenseDocument) {
             return this.isRecurring;
         }
     }
@@ -78,14 +78,14 @@ expenseSchema.statics.getTotalExpenseForPeriod = function(userId: string, startD
 };
 
 // Define the model interface with static methods
-interface IExpenseModel extends Model<IExpense> {
-    findByUserId(userId: string): Promise<IExpense[]>;
-    findRecurringExpenses(userId: string): Promise<IExpense[]>;
+interface IExpenseModel extends Model<IExpenseDocument> {
+    findByUserId(userId: string): Promise<IExpenseDocument[]>;
+    findRecurringExpenses(userId: string): Promise<IExpenseDocument[]>;
     getTotalExpenseForPeriod(userId: string, startDate: Date, endDate: Date): Promise<any[]>;
 }
 
 // Create and export the model, to be new'd up in controllers.
-const Expense: IExpenseModel = mongoose.model<IExpense, IExpenseModel>('Expense', expenseSchema);
+const Expense: IExpenseModel = mongoose.model<IExpenseDocument, IExpenseModel>('Expense', expenseSchema);
 
 // Export the model
 export default Expense;

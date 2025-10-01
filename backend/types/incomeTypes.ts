@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/incomeTypes.ts
- * Generated on: 2025-09-29T22:16:44.818Z
+ * Generated on: 2025-10-01T01:15:08.354Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/incomeTypes.ts
@@ -60,8 +60,16 @@ export interface IncomeFormData {
     startDate?: string;
 }
 
-// Mongoose Document interface for Income
-export interface IIncome extends Document, BaseIncome {
+// Frontend interface for Income (clean interface for client-side)
+export interface IIncome extends BaseIncome {
+    _id: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+// Backend Mongoose Document interface for Income
+export interface IIncomeDocument extends Document, BaseIncome {
     userId: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;

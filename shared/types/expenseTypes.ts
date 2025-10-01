@@ -50,8 +50,16 @@ export interface ExpenseFormData {
     startDate?: string;
 }
 
-// Mongoose Document interface for Expense
-export interface IExpense extends Document, BaseExpense {
+// Frontend interface - for React components and API responses
+export interface IExpense extends BaseExpense {
+    _id: string;
+    userId: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+}
+
+// Backend Mongoose Document interface (use this in backend only)
+export interface IExpenseDocument extends Document, BaseExpense {
     userId: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;

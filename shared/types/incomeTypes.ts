@@ -47,8 +47,16 @@ export interface IncomeFormData {
     startDate?: string;
 }
 
-// Mongoose Document interface for Income
-export interface IIncome extends Document, BaseIncome {
+// Frontend interface for Income (clean interface for client-side)
+export interface IIncome extends BaseIncome {
+    _id: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+// Backend Mongoose Document interface for Income
+export interface IIncomeDocument extends Document, BaseIncome {
     userId: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
