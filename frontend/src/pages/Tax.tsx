@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 import { UserResponseData } from '../types/authTypes';
@@ -26,13 +26,7 @@ const TaxPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      fetchTaxData();
-    }
-  }, [user]);
-
-  const fetchTaxData = async () => {
+  const fetchTaxData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -63,7 +57,13 @@ const TaxPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchTaxData();
+    }
+  }, [user, fetchTaxData]);
 
   const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-AU', {
