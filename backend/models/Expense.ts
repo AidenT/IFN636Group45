@@ -1,4 +1,5 @@
-import { IExpenseDocument, EXPENSE_CATEGORIES, RECURRING_FREQUENCIES } from '../types/expenseTypes';
+import { EXPENSE_CATEGORIES, RECURRING_FREQUENCIES } from '../types/expenseTypes';
+import { IExpenseDocument } from '../types/backendExpenseTypes';
 import mongoose, { Schema, Model } from 'mongoose';
 
 const expenseSchema = new Schema<IExpenseDocument>({

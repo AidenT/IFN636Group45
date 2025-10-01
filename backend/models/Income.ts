@@ -1,5 +1,6 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { INCOME_CATEGORIES, RECURRING_FREQUENCIES, IIncomeDocument } from '../types/incomeTypes';
+import { INCOME_CATEGORIES, RECURRING_FREQUENCIES } from '../types/incomeTypes';
+import { IIncomeDocument } from '../types/backendIncomeTypes';
 
 const incomeSchema = new Schema<IIncomeDocument>({
     userId: { 

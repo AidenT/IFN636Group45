@@ -1,7 +1,6 @@
 import Expense from '../models/Expense';
-import { IExpenseDocument, ExpenseData } from '../types/expenseTypes';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
-import { CreateExpenseRequest, UpdateExpenseRequest } from '../types/expenseTypes'
+import { IExpenseDocument, ExpenseData, CreateExpenseRequest, UpdateExpenseRequest } from '../types/backendExpenseTypes'
 
 const getExpenses = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {

@@ -3,9 +3,9 @@ import { TaxCalculatorFactory } from '../classes/TaxCalculator';
 import Expense from '../models/Expense';
 import Income from '../models/Income';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
-import { IExpenseDocument } from '../types/expenseTypes';
 import { Country } from '../types/globalTypes';
-import { IIncomeDocument } from '../types/incomeTypes';
+import { IExpenseDocument } from '../types/backendExpenseTypes';
+import { IIncomeDocument } from '../types/backendIncomeTypes';
 
 class TaxHandler {
     async getTaxRecords(req: AuthenticatedRequest) {

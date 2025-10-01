@@ -1,10 +1,6 @@
 import Income from '../models/Income';
-import { IIncomeDocument } from '../types/incomeTypes';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
-import { 
-    CreateIncomeRequest, 
-    UpdateIncomeRequest 
-} from '../types/incomeTypes';
+import { IIncomeDocument, CreateIncomeRequest, UpdateIncomeRequest } from '../types/backendIncomeTypes';
 
 const getIncomes = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {

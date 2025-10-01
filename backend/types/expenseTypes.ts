@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/expenseTypes.ts
- * Generated on: 2025-10-01T01:15:08.351Z
+ * Generated on: 2025-10-01T01:39:44.334Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/expenseTypes.ts
@@ -10,8 +10,6 @@
  * 
  * Any direct edits to this file will be lost when types are synchronized!
  */
-
-import mongoose, { Document } from 'mongoose';
 
 // @Shared
 // Import types and constants from Expense model
@@ -71,48 +69,3 @@ export interface IExpense extends BaseExpense {
     updatedAt: Date | string;
 }
 
-// Backend Mongoose Document interface (use this in backend only)
-export interface IExpenseDocument extends Document, BaseExpense {
-    userId: mongoose.Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-// Backend specific for controller methods
-export interface ExpenseData {
-    _id?: string;
-    userId: string;
-    amount: number;
-    dateSpent: Date;
-    description: string;
-    category: ExpenseCategory;
-    merchant: string;
-    isRecurring: boolean;
-    recurringFrequency?: RecurringFrequency;
-    startDate?: Date;
-    createdAt: Date;
-    save?: () => Promise<ExpenseData>;
-    remove?: () => Promise<void>;
-}
-
-export interface CreateExpenseRequest {
-    amount: number;
-    dateSpent?: Date;
-    description: string;
-    category: ExpenseCategory;
-    merchant: string;
-    isRecurring?: boolean;
-    recurringFrequency?: RecurringFrequency;
-    startDate?: Date;
-}
-
-export interface UpdateExpenseRequest {
-    amount?: number;
-    dateSpent?: Date;
-    description?: string;
-    category?: ExpenseCategory;
-    merchant?: string;
-    isRecurring?: boolean;
-    recurringFrequency?: RecurringFrequency;
-    startDate?: Date;
-}

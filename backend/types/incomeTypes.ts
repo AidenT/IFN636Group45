@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/incomeTypes.ts
- * Generated on: 2025-10-01T01:15:08.354Z
+ * Generated on: 2025-10-01T01:39:44.336Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/incomeTypes.ts
@@ -10,8 +10,6 @@
  * 
  * Any direct edits to this file will be lost when types are synchronized!
  */
-
-import mongoose, { Document } from 'mongoose';
 
 // @Shared
 export const INCOME_CATEGORIES = {
@@ -68,31 +66,3 @@ export interface IIncome extends BaseIncome {
     updatedAt: Date;
 }
 
-// Backend Mongoose Document interface for Income
-export interface IIncomeDocument extends Document, BaseIncome {
-    userId: mongoose.Types.ObjectId;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface UpdateIncomeRequest {
-    amount?: number;
-    dateEarned?: Date;
-    description?: string;
-    category?: IncomeCategory;
-    source?: string;
-    isRecurring?: boolean;
-    recurringFrequency?: RecurringFrequency;
-    startDate?: Date;
-}
-
-export interface CreateIncomeRequest {
-    amount: number;
-    dateEarned?: Date;
-     description: string;
-    category: IncomeCategory;
-    source: string;
-    isRecurring?: boolean;
-    recurringFrequency?: RecurringFrequency;
-    startDate?: Date;
-}
