@@ -17,7 +17,7 @@ interface ExpenseTableProps {
 }
 
 const ExpenseTable: React.FC<ExpenseTableProps> = ({
-  expenses,
+  expenses = [], // Default to empty array if undefined/null
   loading,
   onEdit,
   onDelete,

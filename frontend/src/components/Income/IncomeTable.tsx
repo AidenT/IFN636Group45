@@ -17,7 +17,7 @@ interface IncomeTableProps {
 }
 
 const IncomeTable: React.FC<IncomeTableProps> = ({
-  incomes,
+  incomes = [], // Default to empty array if undefined/null
   loading,
   onEdit,
   onDelete,
