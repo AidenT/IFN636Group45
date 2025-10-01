@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/expenseTypes.ts
- * Generated on: 2025-09-29T22:16:44.815Z
+ * Generated on: 2025-10-01T01:15:08.351Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/expenseTypes.ts
@@ -63,8 +63,16 @@ export interface ExpenseFormData {
     startDate?: string;
 }
 
-// Mongoose Document interface for Expense
-export interface IExpense extends Document, BaseExpense {
+// Frontend interface - for React components and API responses
+export interface IExpense extends BaseExpense {
+    _id: string;
+    userId: string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+}
+
+// Backend Mongoose Document interface (use this in backend only)
+export interface IExpenseDocument extends Document, BaseExpense {
     userId: mongoose.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;

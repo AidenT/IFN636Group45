@@ -23,6 +23,7 @@ const bcrypt = require('bcrypt');
 
 // Now require the COMPILED controller after mocking User
 const { registerUser, loginUser, getProfile, updateUserProfile } = require('../dist/controllers/authController');
+const { Country } = require('../dist/types/globalTypes');
 
 // Restore original require
 Module.prototype.require = originalRequire;
@@ -152,7 +153,7 @@ describe('Auth Controller Tests - JavaScript/TypeScript Compatible', () => {
             const mockUserData = {
                 name: 'John Doe',
                 email: 'john@example.com',
-                country: 'Australia',
+                country: Country.Australia,
                 address: '123 Test Street'
             };
 
@@ -166,7 +167,7 @@ describe('Auth Controller Tests - JavaScript/TypeScript Compatible', () => {
             expect(jsonStub.calledWith({
                 name: 'John Doe',
                 email: 'john@example.com',
-                country: 'Australia',
+                country: Country.Australia,
                 address: '123 Test Street'
             })).to.be.true;
         });

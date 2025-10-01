@@ -1,5 +1,5 @@
 import Income from '../models/Income';
-import { IIncome } from '../types/incomeTypes';
+import { IIncomeDocument } from '../types/incomeTypes';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
 import { 
     CreateIncomeRequest, 
@@ -8,7 +8,7 @@ import {
 
 const getIncomes = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {
-        const incomes: IIncome[] = await Income.find({ userId: req.user?._id }).sort({ dateEarned: -1 });
+        const incomes: IIncomeDocument[] = await Income.find({ userId: req.user?._id }).sort({ dateEarned: -1 });
         res.json(incomes);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -66,7 +66,7 @@ const addIncome = async (req: AuthenticatedRequest, res: ExpressResponse): Promi
             ...(isRecurring && { startDate })
         };
 
-        const income: IIncome = await Income.create(incomeData);
+        const income: IIncomeDocument = await Income.create(incomeData);
         res.status(201).json(income);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -86,7 +86,7 @@ const updateIncome = async (req: AuthenticatedRequest, res: ExpressResponse): Pr
     }: UpdateIncomeRequest = req.body;
 
     try {
-        const income: IIncome | null = await Income.findById(req.params.id);
+        const income: IIncomeDocument | null = await Income.findById(req.params.id);
         if (!income) {
             res.status(404).json({ message: 'Income not found' });
             return;
@@ -118,7 +118,7 @@ const updateIncome = async (req: AuthenticatedRequest, res: ExpressResponse): Pr
             income.startDate = undefined;
         }
 
-        const updatedIncome: IIncome = await income.save();
+        const updatedIncome: IIncomeDocument = await income.save();
         res.json(updatedIncome);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
@@ -136,7 +136,7 @@ const deleteIncome = async (req: AuthenticatedRequest, res: ExpressResponse): Pr
 
 const getIncomeById = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {
-        const income: IIncome | null = await Income.findById(req.params.id);
+        const income: IIncomeDocument | null = await Income.findById(req.params.id);
         if (!income) {
             res.status(404).json({ message: 'Income not found' });
             return;

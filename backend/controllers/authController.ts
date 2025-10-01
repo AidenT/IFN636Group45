@@ -83,6 +83,7 @@ const getProfile = async (req: ExpressRequest, res: ExpressResponse): Promise<vo
             name: user.name,
             email: user.email,
             address: user.address,
+            country: user.country
         };
         res.status(200).json(response);
     } catch (error: any) {
