@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/authTypes.ts
- * Generated on: 2025-10-01T01:54:22.516Z
+ * Generated on: 2025-10-03T00:35:30.092Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/authTypes.ts
@@ -57,7 +57,6 @@ export interface ExpressResponse {
     json: (data: any) => void;
 }
 
-// Auth-specific request types
 export interface RegisterRequest {
     name: string;
     email: string;
@@ -78,7 +77,7 @@ export interface UpdateProfileRequest {
     address?: string;
 }
 
-// Define interfaces for our middleware
+// Interfaces for our middleware
 export interface UserPayload {
     id: string;
     iat?: number;

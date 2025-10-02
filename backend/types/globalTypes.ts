@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/globalTypes.ts
- * Generated on: 2025-10-01T01:54:22.519Z
+ * Generated on: 2025-10-03T00:35:30.097Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/globalTypes.ts
@@ -14,7 +14,6 @@
 // @Shared
 // Common types used throughout front and backend
 
-// enum of countries
 export enum Country {
     Australia = 'Australia',
     Canada = 'Canada',
