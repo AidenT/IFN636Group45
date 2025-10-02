@@ -36,9 +36,10 @@ const getTax = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<
     }
 };
 
+// TODO: A better implementation for this would be to implement dependency injection and have the DI container manage the financial year calculator instances. This would enable caching too.
 const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IIncomeDocument[]> => {
-    const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
-    const financialYear = financialYearCalculator.getFinancialYear(new Date()); // Extensible for different dates by passing through an argument
+    const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(new Date(), country); // Extensible for different financial years other than current by changing date argument
+    const financialYear = financialYearCalculator.getFinancialYear();
 
     // Get all incomes for this financial year
     const incomes: IIncomeDocument[] = await Income.find({
@@ -53,8 +54,8 @@ const getIncomeRecordsForUsersFinancialYear = async (userId: string, country?: C
 };
 
 const getExpenseRecordsForUsersFinancialYear = async (userId: string, country?: Country): Promise<IExpenseDocument[]> => {
-    const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(country || Country.Australia);
-    const financialYear = financialYearCalculator.getFinancialYear(new Date()); // Extensible for different dates by passing through an argument
+    const financialYearCalculator = FinancialYearCalculatorFactory.getCalculator(new Date(), country); // Extensible for different financial years other than current by changing date argument
+    const financialYear = financialYearCalculator.getFinancialYear();
 
     // Get all expenses for this financial year
     const expenses: IExpenseDocument[] = await Expense.find({

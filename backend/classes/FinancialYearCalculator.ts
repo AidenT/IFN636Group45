@@ -1,25 +1,55 @@
 import { Country } from "../types/globalTypes";
 
+interface FinancialYear {
+    start: Date;
+    end: Date;
+    label: string;
+}
+
 export abstract class FinancialYearCalculator {
-    public abstract getFinancialYear(date?: Date): {
-        start: Date;
-        end: Date;
-        label: string;
-    };
+    protected year: number;
+    protected month: number;
+    protected day: number;
+
+    constructor(year: number, month: number, day: number) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    public abstract getFinancialYear(): FinancialYear;
+
+    protected getFinancialYearStart(currentMonth: number, currentYear: number, currentDay: number, financialYearStart: Date): Date {
+        const fyStartMonth = financialYearStart.getMonth();
+        const fyStartDay = financialYearStart.getDate();
+
+        if (currentMonth < fyStartMonth) {
+            // Before the start month - use last year
+            financialYearStart = new Date(currentYear - 1, fyStartMonth, fyStartDay);
+        } else if (currentMonth > fyStartMonth) {
+            // After the start month - use current year
+            financialYearStart = new Date(currentYear, fyStartMonth, fyStartDay);
+        } else {
+            // Same month - check the day
+            if (currentDay < fyStartDay) {
+                financialYearStart = new Date(currentYear - 1, fyStartMonth, fyStartDay);
+            } else {
+                financialYearStart = new Date(currentYear, fyStartMonth, fyStartDay);
+            }
+        }
+
+        return financialYearStart;
+    }
 }
 
 export class AustralianFinancialYearCalculator extends FinancialYearCalculator {
-    public getFinancialYear(date: Date): {
-        start: Date;
-        end: Date;
-        label: string;
-    } {
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth();
-        const currentDay = date.getDate();
-
-        const ausFYStartDate = new Date(currentYear, 6, 1) // July 1st
-        const financialYearStart = getFinancialYearStart(currentMonth, currentYear, currentDay, ausFYStartDate);
+    constructor(year: number, month: number, day: number) {
+        super(year, month, day);
+    }
+    
+    public getFinancialYear(): FinancialYear {
+        const ausFYStartDate = new Date(this.year, 6, 1) // July 1st
+        const financialYearStart = this.getFinancialYearStart(this.month, this.year, this.day, ausFYStartDate);
         const financialYearEnd = new Date(financialYearStart.getFullYear() + 1, 5, 30, 23, 59, 59); // June 30th the year following the FY start
 
         return {
@@ -31,17 +61,13 @@ export class AustralianFinancialYearCalculator extends FinancialYearCalculator {
 }
 
 export class USFinancialYearCalculator extends FinancialYearCalculator {
-    public getFinancialYear(date: Date): {
-        start: Date;
-        end: Date;
-        label: string;
-    } {
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth();
-        const currentDay = date.getDate();
-
-        const usFYStartDate = new Date(currentYear, 9, 1) // October 1st
-        const financialYearStart = getFinancialYearStart(currentMonth, currentYear, currentDay, usFYStartDate);
+    constructor(year: number, month: number, day: number) {
+        super(year, month, day);
+    }
+    
+    public getFinancialYear(): FinancialYear {
+        const usFYStartDate = new Date(this.year, 9, 1) // October 1st
+        const financialYearStart = this.getFinancialYearStart(this.month, this.year, this.day, usFYStartDate);
         const financialYearEnd = new Date(financialYearStart.getFullYear() + 1, 8, 30, 23, 59, 59); // September 30th the year following the FY start
 
         return {
@@ -53,17 +79,13 @@ export class USFinancialYearCalculator extends FinancialYearCalculator {
 }
 
 export class UKFinancialYearCalculator extends FinancialYearCalculator {
-    public getFinancialYear(date: Date): {
-        start: Date;
-        end: Date;
-        label: string;
-    } {
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth();
-        const currentDay = date.getDate();
-
-        const ukFYStartDate = new Date(currentYear, 3, 6); // April 6th
-        const financialYearStart = getFinancialYearStart(currentMonth, currentYear, currentDay, ukFYStartDate);
+    constructor(year: number, month: number, day: number) {
+        super(year, month, day);
+    }
+    
+    public getFinancialYear(): FinancialYear {
+        const ukFYStartDate = new Date(this.year, 3, 6); // April 6th
+        const financialYearStart = this.getFinancialYearStart(this.month, this.year, this.day, ukFYStartDate);
         const financialYearEnd = new Date(financialYearStart.getFullYear() + 1, 3, 5, 23, 59, 59); // April 5th the year following the FY start
 
         return {
@@ -75,17 +97,13 @@ export class UKFinancialYearCalculator extends FinancialYearCalculator {
 }
 
 export class CanadianFinancialYearCalculator extends FinancialYearCalculator {
-    public getFinancialYear(date: Date): {
-        start: Date;
-        end: Date;
-        label: string;
-    } {
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth();
-        const currentDay = date.getDate();
-
-        const caFYStartDate = new Date(currentYear, 3, 1); // April 1st
-        const financialYearStart = getFinancialYearStart(currentMonth, currentYear, currentDay, caFYStartDate);
+    constructor(year: number, month: number, day: number) {
+        super(year, month, day);
+    }
+    
+    public getFinancialYear(): FinancialYear {
+        const caFYStartDate = new Date(this.year, 3, 1); // April 1st
+        const financialYearStart = this.getFinancialYearStart(this.month, this.year, this.day, caFYStartDate);
         const financialYearEnd = new Date(financialYearStart.getFullYear() + 1, 2, 31, 23, 59, 59); // March 31st the year following the FY start
 
         return {
@@ -97,17 +115,13 @@ export class CanadianFinancialYearCalculator extends FinancialYearCalculator {
 }
 
 export class CalendarYearCalculator extends FinancialYearCalculator {
-    public getFinancialYear(date: Date = new Date()): {
-        start: Date;
-        end: Date;
-        label: string;
-    } {
-        const currentYear = date.getFullYear();
-        const currentMonth = date.getMonth();
-        const currentDay = date.getDate();
-
-        const calStartDate = new Date(currentYear, 0, 1) // Jan 1st
-        const financialYearStart = getFinancialYearStart(currentMonth, currentYear, currentDay, calStartDate);
+    constructor(year: number, month: number, day: number) {
+        super(year, month, day);
+    }
+    
+    public getFinancialYear(): FinancialYear {
+        const calStartDate = new Date(this.year, 0, 1) // Jan 1st
+        const financialYearStart = this.getFinancialYearStart(this.month, this.year, this.day, calStartDate);
         const financialYearEnd = new Date(financialYearStart.getFullYear(), 11, 31, 23, 59, 59); // December 31st same year.
 
         return {
@@ -118,42 +132,23 @@ export class CalendarYearCalculator extends FinancialYearCalculator {
     }
 }
 
-
-function getFinancialYearStart(currentMonth: number, currentYear: number, currentDay: number, financialYearStart: Date): Date {
-    const fyStartMonth = financialYearStart.getMonth();
-    const fyStartDay = financialYearStart.getDate();
-
-    if (currentMonth < fyStartMonth) {
-        // Before the start month - use last year
-        financialYearStart = new Date(currentYear - 1, fyStartMonth, fyStartDay);
-    } else if (currentMonth > fyStartMonth) {
-        // After the start month - use current year
-        financialYearStart = new Date(currentYear, fyStartMonth, fyStartDay);
-    } else {
-        // Same month - check the day
-        if (currentDay < fyStartDay) {
-            financialYearStart = new Date(currentYear - 1, fyStartMonth, fyStartDay);
-        } else {
-            financialYearStart = new Date(currentYear, fyStartMonth, fyStartDay);
-        }
-    }
-
-    return financialYearStart;
-}
-
 export class FinancialYearCalculatorFactory {
-    public static getCalculator(country: Country): FinancialYearCalculator {
+    public static getCalculator(date: Date, country?: Country): FinancialYearCalculator {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+
         switch (country) {
             case Country.Australia:
-                return new AustralianFinancialYearCalculator();
+                return new AustralianFinancialYearCalculator(year, month, day);
             case Country.UnitedStates:
-                return new USFinancialYearCalculator();
+                return new USFinancialYearCalculator(year, month, day);
             case Country.UnitedKingdom:
-                return new UKFinancialYearCalculator();
+                return new UKFinancialYearCalculator(year, month, day);
             case Country.Canada:
-                return new CanadianFinancialYearCalculator();
+                return new CanadianFinancialYearCalculator(year, month, day);
             default:
-                return new CalendarYearCalculator();
+                return new CalendarYearCalculator(year, month, day);
         }
     }
 }
