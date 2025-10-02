@@ -44,7 +44,6 @@ export interface ExpressResponse {
     json: (data: any) => void;
 }
 
-// Auth-specific request types
 export interface RegisterRequest {
     name: string;
     email: string;
@@ -65,7 +64,7 @@ export interface UpdateProfileRequest {
     address?: string;
 }
 
-// Define interfaces for our middleware
+// Interfaces for our middleware
 export interface UserPayload {
     id: string;
     iat?: number;

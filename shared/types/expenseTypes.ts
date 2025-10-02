@@ -1,5 +1,4 @@
 // @Shared
-// Import types and constants from Expense model
 export const EXPENSE_CATEGORIES = {
     HOUSING: 'Housing',
     TRANSPORTATION: 'Transportation',
@@ -11,7 +10,7 @@ export const EXPENSE_CATEGORIES = {
     EDUCATION: 'Education',
     TRAVEL: 'Travel',
     OTHER: 'Other'
-} as const;
+} as const; // For typescript literal types
 
 export const RECURRING_FREQUENCIES = {
     WEEKLY: 'Weekly',
@@ -19,9 +18,9 @@ export const RECURRING_FREQUENCIES = {
     MONTHLY: 'Monthly',
     QUARTERLY: 'Quarterly',
     YEARLY: 'Yearly'
-} as const;
+} as const; // For typescript literal types
 
-// Utility types
+
 export type ExpenseCategory = typeof EXPENSE_CATEGORIES[keyof typeof EXPENSE_CATEGORIES];
 export type RecurringFrequency = typeof RECURRING_FREQUENCIES[keyof typeof RECURRING_FREQUENCIES];
 
@@ -36,7 +35,6 @@ export interface BaseExpense {
     startDate?: Date | string; // Allow both Date and string for API compatibility
 }
 
-// Expense form data (for frontend forms)
 export interface ExpenseFormData {
     amount: string; // String for form inputs
     dateSpent: string;
@@ -48,7 +46,6 @@ export interface ExpenseFormData {
     startDate?: string;
 }
 
-// Frontend interface - for React components and API responses
 export interface IExpense extends BaseExpense {
     _id: string;
     userId: string;
