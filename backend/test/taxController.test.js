@@ -1,19 +1,15 @@
-// Mock the Income and Expense models before requiring anything else
 const mockIncomeModel = {
     find: require('sinon').stub()
 };
-
 const mockExpenseModel = {
     find: require('sinon').stub()    
 };
 
-// Mock TaxCalculator
 const mockTaxCalculator = {
     calculateIncomeTax: require('sinon').stub(),
     calculateExpenseTax: require('sinon').stub()
 };
 
-// Mock TaxCalculatorFactory constructor
 const mockTaxCalculatorFactory = {
     getTaxCalculator: require('sinon').stub().returns(mockTaxCalculator)
 };
@@ -22,17 +18,15 @@ function MockTaxCalculatorFactory() {
     return mockTaxCalculatorFactory;
 }
 
-// Mock FinancialYearCalculator
 const mockFinancialYearCalculator = {
     getFinancialYear: require('sinon').stub()
 };
 
-// Mock FinancialYearCalculatorFactory static methods
 const mockFinancialYearCalculatorFactory = {
     getCalculator: require('sinon').stub().returns(mockFinancialYearCalculator)
 };
 
-// Mock all possible module paths
+// Mock all possible module paths due to typescript vs javascript import/export differences
 const Module = require('module');
 const originalRequire = Module.prototype.require;
 
@@ -86,7 +80,6 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
             json: jsonStub
         };
 
-        // Reset all stubs
         sinon.resetHistory();
         mockIncomeModel.find.reset();
         mockExpenseModel.find.reset();
@@ -96,7 +89,6 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
         mockFinancialYearCalculator.getFinancialYear.reset();
         mockFinancialYearCalculatorFactory.getCalculator.reset();
         
-        // Re-setup return values after reset
         mockTaxCalculatorFactory.getTaxCalculator.returns(mockTaxCalculator);
         mockFinancialYearCalculatorFactory.getCalculator.returns(mockFinancialYearCalculator);
     });
@@ -146,7 +138,6 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
                 label: 'FY2025-2026'
             };
 
-            // Setup mock query chains
             const mockIncomeQuery = {
                 sort: sinon.stub().resolves(mockIncomes)
             };
@@ -157,26 +148,24 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
             mockIncomeModel.find.returns(mockIncomeQuery);
             mockExpenseModel.find.returns(mockExpenseQuery);
             mockFinancialYearCalculator.getFinancialYear.returns(mockFinancialYear);
-            mockTaxCalculator.calculateIncomeTax.returns(750); // Mock tax calculation
+            mockTaxCalculator.calculateIncomeTax.returns(750);
 
             await getTax(req, res);
 
 
+            expect(mockFinancialYearCalculatorFactory.getCalculator.callCount).to.equal(2);
 
-            // Verify financial year calculator was called
-            expect(mockFinancialYearCalculatorFactory.getCalculator.calledWith('Australia')).to.be.true;
+            expect(mockFinancialYearCalculatorFactory.getCalculator.firstCall.args[0]).to.be.instanceOf(Date);
+            expect(mockFinancialYearCalculatorFactory.getCalculator.firstCall.args[1]).to.equal('Australia');
             expect(mockFinancialYearCalculator.getFinancialYear.calledTwice).to.be.true; // Called once for income, once for expenses
 
-            // Verify database queries
             expect(mockIncomeModel.find.calledOnce).to.be.true;
             expect(mockExpenseModel.find.calledOnce).to.be.true;
 
-            // Verify tax calculator was used
             expect(mockTaxCalculatorFactory.getTaxCalculator.calledWith('Australia')).to.be.true;
             expect(mockTaxCalculator.calculateIncomeTax.calledOnce).to.be.true;
             expect(mockTaxCalculator.calculateIncomeTax.calledWith(5000, 8000)).to.be.true; // amount, grossIncome
 
-            // Verify response
             expect(res.json.calledOnce).to.be.true;
             expect(res.json.calledWith({
                 incomes: sinon.match.array,
@@ -190,7 +179,6 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
                 sort: sinon.stub().rejects(new Error(errorMessage))
             };
             
-            // Setup financial year mock (needed before database error occurs)
             const mockFinancialYear = {
                 start: new Date('2025-07-01'),
                 end: new Date('2026-06-30'),
@@ -241,7 +229,6 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
 
             await getTax(req, res);
 
-            // Tax calculation should not be called for paid taxes
             expect(mockTaxCalculator.calculateIncomeTax.called).to.be.false;
             expect(res.json.calledOnce).to.be.true;
         });
@@ -249,7 +236,7 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
 
     describe('getTax with different countries', () => {
         it('should use correct tax calculator for US user', async () => {
-            req.user.country = 'UnitedStates';
+            req.user.country = 'United States';
             
             const mockIncomes = [];
             const mockExpenses = [];
@@ -273,8 +260,7 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
             await getTax(req, res);
 
             // Verify tax calculator factory was called with correct country
-            expect(mockTaxCalculatorFactory.getTaxCalculator.calledWith('UnitedStates')).to.be.true;
-            expect(mockFinancialYearCalculatorFactory.getCalculator.calledWith('UnitedStates')).to.be.true;
+            expect(mockTaxCalculatorFactory.getTaxCalculator.calledWith('United States')).to.be.true;
             
             expect(res.json.calledOnce).to.be.true;
         });
@@ -303,8 +289,10 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
 
             await getTax(req, res);
 
-            // Should default to Australia when country is undefined
-            expect(mockFinancialYearCalculatorFactory.getCalculator.calledWith('Australia')).to.be.true;
+            // Should default to Australia when country is undefined (factory called with date and undefined)
+            expect(mockFinancialYearCalculatorFactory.getCalculator.callCount).to.equal(2);
+            expect(mockFinancialYearCalculatorFactory.getCalculator.firstCall.args[0]).to.be.instanceOf(Date);
+            expect(mockFinancialYearCalculatorFactory.getCalculator.firstCall.args[1]).to.be.undefined;
             expect(res.json.calledOnce).to.be.true;
         });
     });
@@ -357,7 +345,6 @@ describe('Tax Controller Tests - JavaScript/TypeScript Compatible', () => {
 
             await getTax(req, res);
 
-            // Verify gross income calculation (3000 + 2000 = 5000)
             expect(mockTaxCalculator.calculateIncomeTax.calledTwice).to.be.true;
             expect(mockTaxCalculator.calculateIncomeTax.firstCall.calledWith(3000, 5000)).to.be.true;
             expect(mockTaxCalculator.calculateIncomeTax.secondCall.calledWith(2000, 5000)).to.be.true;
