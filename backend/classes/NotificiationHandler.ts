@@ -1,3 +1,5 @@
+import { EmailClient, EmailMessage } from './EmailClient';
+
 export enum NotificationType {
     EXPENSE_ADDED = 'EXPENSE_ADDED',
     INCOME_ADDED = 'INCOME_ADDED',
@@ -60,9 +62,11 @@ export class LogNotificationHandler implements NotificationHandler {
 
 export class EmailNotificationHandler implements NotificationHandler {
     private logHandler: LogNotificationHandler;
+    private emailClient: EmailClient;
 
-    constructor(logHandler: LogNotificationHandler) {
+    constructor(logHandler: LogNotificationHandler, emailClient?: EmailClient) {
         this.logHandler = logHandler;
+        this.emailClient = emailClient || new EmailClient();
     }
 
     notify(message: NotificationMessage): void {
@@ -70,9 +74,18 @@ export class EmailNotificationHandler implements NotificationHandler {
         this.sendEmail(message);
     }
 
-    private sendEmail(message: NotificationMessage): void {
-        console.log(`Sending email to user ${message.userId}:`);
-        // TODO: Implement actual email sending
-        // await emailService.send(message.userId, message.title, message.message);
+    private async sendEmail(message: NotificationMessage): Promise<void> {
+        try {
+            const emailMessage: EmailMessage = {
+                to: message.userId,
+                subject: message.title,
+                body: message.message,
+                priority: message.priority
+            };
+
+            await this.emailClient.sendEmail(emailMessage);
+        } catch (error) {
+            console.error(`Failed to send notification email for message ${message.id}:`, error);
+        }
     }
 }
