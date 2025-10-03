@@ -5,7 +5,8 @@ const mockUser = {
     findById: require('sinon').stub()
 };
 
-// Mock all possible User module paths
+// Mock all possible model module paths 
+// This is a bit hacky, TODO fix up all of the dodgy mixing of common JS and modern ES modules
 const Module = require('module');
 const originalRequire = Module.prototype.require;
 
