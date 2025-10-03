@@ -6,18 +6,10 @@ const FinancialGoalsMenuContent = () => {
       <ul className="grid w-[300px] gap-4 ">
               <li>
                 <NavigationMenuLink asChild>
-                  <Link to="/comingSoon">
-                    <div className="font-medium">Add Savings Target</div>
+                  <Link to="/budget">
+                    <div className="font-medium">Budget Goals</div>
                     <div className="text-muted-foreground">
-                      Feature coming soon!
-                    </div>
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link to="/comingSoon">
-                    <div className="font-medium">Add Budget</div>
-                    <div className="text-muted-foreground">
-                      Feature coming soon!
+                      Manage your budget goals
                     </div>
                   </Link>
                 </NavigationMenuLink>

@@ -9,6 +9,7 @@ import HomePage from './pages/Home';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ComingSoon from './pages/ComingSoon';
 import TaxPage from './pages/Tax';
+import BudgetPage from './pages/Budget';
 
 
 
@@ -28,6 +29,7 @@ function AppContent() {
         <Route path="/income" element={<IncomePage />} />
         <Route path="/expense" element={<ExpensePage />} />
         <Route path="/tax" element={<TaxPage />} />
+        <Route path="/budget" element={<BudgetPage />} />
       </Routes>
     </Router>
   );

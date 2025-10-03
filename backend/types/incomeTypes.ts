@@ -2,7 +2,7 @@
  * ⚠️  AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY ⚠️
  * 
  * This file was automatically generated from: shared/types/incomeTypes.ts
- * Generated on: 2025-10-01T01:54:22.521Z
+ * Generated on: 2025-10-03T00:35:30.098Z
  * 
  * To make changes:
  * 1. Edit the source file: shared/types/incomeTypes.ts
@@ -19,7 +19,7 @@ export const INCOME_CATEGORIES = {
     BUSINESS: 'Business',
     GIFT: 'Gift',
     OTHER: 'Other'
-} as const;
+} as const; // For typescript literal types
 
 export const RECURRING_FREQUENCIES = {
     WEEKLY: 'Weekly',
@@ -27,9 +27,8 @@ export const RECURRING_FREQUENCIES = {
     MONTHLY: 'Monthly',
     QUARTERLY: 'Quarterly',
     YEARLY: 'Yearly'
-} as const;
+} as const; // For typescript literal types
 
-// Utility types
 export type IncomeCategory = typeof INCOME_CATEGORIES[keyof typeof INCOME_CATEGORIES];
 export type RecurringFrequency = typeof RECURRING_FREQUENCIES[keyof typeof RECURRING_FREQUENCIES];
 
@@ -46,7 +45,6 @@ export interface BaseIncome {
     tax?: number;
 }
 
-// Income form data (for frontend forms)
 export interface IncomeFormData {
     amount: string; // String for form inputs
     dateEarned: string;
@@ -58,11 +56,9 @@ export interface IncomeFormData {
     startDate?: string;
 }
 
-// Frontend interface for Income (clean interface for client-side)
 export interface IIncome extends BaseIncome {
     _id: string;
     userId: string;
     createdAt: Date;
     updatedAt: Date;
 }
-

@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes';
 import incomeRoutes from './routes/incomeRoutes';
 import expenseRoutes from './routes/expenseRoutes';
 import taxRoutes from './routes/taxRoutes';
+import budgetRoutes from './routes/budgetRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/income', incomeRoutes);
 app.use('/api/expense', expenseRoutes);
 app.use('/api/tax', taxRoutes);
+app.use('/api/budgets', budgetRoutes);
 
 // Define the port type
 const PORT: number = parseInt(process.env.PORT || '5001', 10);
