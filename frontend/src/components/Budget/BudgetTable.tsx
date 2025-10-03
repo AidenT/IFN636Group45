@@ -70,15 +70,6 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
     }
   };
 
-  const getDaysRemaining = (targetDate: Date | string): number => {
-    const target = new Date(targetDate);
-    const now = new Date();
-    const diffTime = target.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return Math.max(diffDays, 0);
-  };
-
-  // Calculate days remaining until end of budget period
   const getDaysUntilEnd = (endDate: string | Date) => {
     const end = new Date(endDate);
     const now = new Date();
