@@ -1,6 +1,18 @@
+import { BudgetCalculator } from '../classes/BudgetCalculator';
+import { EmailNotificationHandler, LogNotificationHandler, NotificationMessage, NotificationObserver, NotificationType } from '../classes/NotificiationHandler';
 import Expense from '../models/Expense';
 import { AuthenticatedRequest, ExpressResponse } from '../types/authTypes';
-import { IExpenseDocument, ExpenseData, CreateExpenseRequest, UpdateExpenseRequest } from '../types/backendExpenseTypes'
+import { CreateExpenseRequest, ExpenseData, IExpenseDocument, UpdateExpenseRequest } from '../types/backendExpenseTypes';
+import { BudgetNotificationMessage } from '../types/budgetNotificationTypes';
+import { ExpenseCategory } from '../types/expenseTypes';
+
+// Singleton implementation ensures there will only be one instance of the Notification Observer 
+// however, multiple instances of the handlers can be instantiated to send simultaneous notifications via different channels
+const notificationObserver = NotificationObserver.getInstance();
+const logHandler = new LogNotificationHandler();
+const emailHandler = new EmailNotificationHandler(logHandler);
+notificationObserver.subscribe(emailHandler);
+
 
 const getExpenses = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
     try {
@@ -31,21 +43,21 @@ const getExpenseById = async (req: AuthenticatedRequest, res: ExpressResponse): 
 };
 
 const addExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
-    const { 
-        amount, 
-        dateSpent, 
-        description, 
-        category, 
-        merchant, 
-        isRecurring, 
-        recurringFrequency, 
-        startDate 
+    const {
+        amount,
+        dateSpent,
+        description,
+        category,
+        merchant,
+        isRecurring,
+        recurringFrequency,
+        startDate
     }: CreateExpenseRequest = req.body;
 
     try {
         if (!amount || !description || !category || !merchant) {
-            res.status(400).json({ 
-                message: 'Missing required fields: amount, description, category, merchant' 
+            res.status(400).json({
+                message: 'Missing required fields: amount, description, category, merchant'
             });
             return;
         }
@@ -56,15 +68,15 @@ const addExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Prom
         }
 
         if (isRecurring && !recurringFrequency) {
-            res.status(400).json({ 
-                message: 'Recurring frequency is required for recurring expenses' 
+            res.status(400).json({
+                message: 'Recurring frequency is required for recurring expenses'
             });
             return;
         }
 
         if (isRecurring && !startDate) {
-            res.status(400).json({ 
-                message: 'Start date is required for recurring expenses' 
+            res.status(400).json({
+                message: 'Start date is required for recurring expenses'
             });
             return;
         }
@@ -82,23 +94,64 @@ const addExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Prom
             createdAt: new Date()
         };
 
+        // Before creating the expense in the database check if this will exceed any budgets and notify the user via email.
+        await notifyBudgetExceedance(req.user?._id, amount, description, category, expenseData.dateSpent);
+
         const expense: IExpenseDocument = await Expense.create(expenseData);
+
         res.status(201).json(expense);
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
 };
 
+async function notifyBudgetExceedance(userId: string | undefined, amount: number, description: string, category: ExpenseCategory, dateSpent: string | Date): Promise<void> {
+    const budgetCalculator = new BudgetCalculator();
+
+    const budgetCheck = await budgetCalculator.checkBudgetExceedance(
+        userId ?? '',
+        amount,
+        category,
+        new Date(dateSpent) || new Date()
+    );
+
+    if (budgetCheck.willExceed) {
+        const budgetNotificationData: BudgetNotificationMessage = {
+            userId: userId ?? '',
+            expenseAmount: amount,
+            expenseDescription: description,
+            expenseCategory: category,
+            exceededBudgets: budgetCheck.exceededBudgets
+        };
+
+        for (const exceededBudget of budgetCheck.exceededBudgets) {
+            const notificationMessage: NotificationMessage = {
+                id: `budget-exceeded-${exceededBudget.category}-${Date.now()}`,
+                type: NotificationType.BUDGET_EXCEEDED,
+                userId: userId ?? '',
+                title: `Budget Exceeded: ${exceededBudget.category}`,
+                message: `Your expense of $${amount.toFixed(2)} for "${description}" has caused your ${exceededBudget.category} budget to exceed its target of $${exceededBudget.targetAmount.toFixed(2)} by $${exceededBudget.exceedanceAmount.toFixed(2)}.`,
+                data: budgetNotificationData,
+                timestamp: new Date(),
+                priority: exceededBudget.exceedanceAmount > 20 ? 'high' : 'medium',
+                read: false
+            };
+
+            notificationObserver.notify(notificationMessage);
+        }
+    }
+}
+
 const updateExpense = async (req: AuthenticatedRequest, res: ExpressResponse): Promise<void> => {
-    const { 
-        amount, 
-        dateSpent, 
-        description, 
-        category, 
-        merchant, 
-        isRecurring, 
-        recurringFrequency, 
-        startDate 
+    const {
+        amount,
+        dateSpent,
+        description,
+        category,
+        merchant,
+        isRecurring,
+        recurringFrequency,
+        startDate
     }: UpdateExpenseRequest = req.body;
 
     try {
@@ -124,7 +177,7 @@ const updateExpense = async (req: AuthenticatedRequest, res: ExpressResponse): P
         if (category !== undefined) expense.category = category as any;
         if (merchant !== undefined) expense.merchant = merchant;
         if (isRecurring !== undefined) expense.isRecurring = isRecurring;
-        
+
         if (expense.isRecurring) {
             if (recurringFrequency !== undefined) expense.recurringFrequency = recurringFrequency as any;
             if (startDate !== undefined) expense.startDate = startDate;
@@ -152,7 +205,7 @@ const deleteExpense = async (req: AuthenticatedRequest, res: ExpressResponse): P
 
 
 // Export using both CommonJS and ES6 for tests
-const expenseController = { 
+const expenseController = {
     getExpenses,
     getExpenseById,
     addExpense,
@@ -164,5 +217,5 @@ const expenseController = {
 module.exports = expenseController;
 
 // ES6 export for TypeScript/modern environments
-export { getExpenses, getExpenseById, addExpense, deleteExpense, updateExpense };
+export { addExpense, deleteExpense, getExpenseById, getExpenses, updateExpense };
 export default expenseController;

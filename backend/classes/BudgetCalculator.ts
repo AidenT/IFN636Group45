@@ -1,5 +1,8 @@
+import mongoose from 'mongoose';
+import Budget from '../models/Budget';
 import Expense from '../models/Expense';
 import { IBudgetDocument } from '../types/backendBudgetTypes';
+import { BudgetCheckResult, BudgetExceededData } from '../types/budgetNotificationTypes';
 
 export interface BudgetProgress {
     progressPercentage: number;
@@ -57,6 +60,65 @@ export class BudgetCalculator {
             daysRemaining: Math.max(daysRemaining, 0),
             isOverBudget: spentAmount > budget.targetAmount,
             suggestedDailyLimit: Math.max(suggestedDailyLimit, 0)
+        };
+    }
+
+    public async checkBudgetExceedance(userId: string, expenseAmount: number, expenseCategory: string, expenseDate: Date): Promise<BudgetCheckResult> {
+
+        const activeBudgetsInCategory = await Budget.find({
+            userId,
+            category: expenseCategory,
+            status: 'Active',
+            startDate: { $lte: expenseDate },
+            endDate: { $gte: expenseDate }
+        });
+
+        const exceededBudgets: BudgetExceededData[] = [];
+
+        for (const budget of activeBudgetsInCategory) {
+            const currentExpenses = await Expense.aggregate([
+                {
+                    $match: {
+                        userId: new mongoose.Types.ObjectId(userId),
+                        category: expenseCategory,
+                        dateSpent: {
+                            $gte: budget.startDate,
+                            $lte: budget.endDate
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        total: { $sum: '$amount' }
+                    }
+                }
+            ]);
+
+            const currentAmount = currentExpenses.reduce((total, expense) => total + expense.amount, 0);
+            const totalAmountAfterExpense = currentAmount + expenseAmount;
+
+            if (totalAmountAfterExpense > budget.targetAmount) {
+                const exceedanceAmount = totalAmountAfterExpense - budget.targetAmount;
+
+                exceededBudgets.push({
+                    budgetId: budget._id.toString(),
+                    budgetDescription: budget.description,
+                    category: budget.category,
+                    targetAmount: budget.targetAmount,
+                    currentAmount,
+                    newExpenseAmount: expenseAmount,
+                    totalAmountAfterExpense,
+                    exceedanceAmount,
+                    startDate: new Date(budget.startDate),
+                    endDate: new Date(budget.endDate)
+                });
+            }
+        }
+
+        return {
+            willExceed: exceededBudgets.length > 0,
+            exceededBudgets
         };
     }
 }

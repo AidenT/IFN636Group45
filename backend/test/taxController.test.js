@@ -26,7 +26,8 @@ const mockFinancialYearCalculatorFactory = {
     getCalculator: require('sinon').stub().returns(mockFinancialYearCalculator)
 };
 
-// Mock all possible module paths due to typescript vs javascript import/export differences
+// Mock all possible model module paths 
+// This is a bit hacky, TODO fix up all of the dodgy mixing of common JS and modern ES modules
 const Module = require('module');
 const originalRequire = Module.prototype.require;
 
