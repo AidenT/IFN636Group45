@@ -46,6 +46,9 @@ const expenseSchema = new Schema<IExpenseDocument>({
         required: function(this: IExpenseDocument) {
             return this.isRecurring;
         }
+    },
+    tax: {
+        type: Number
     }
 }, {
     timestamps: true

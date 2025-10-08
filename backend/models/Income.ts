@@ -46,6 +46,9 @@ const incomeSchema = new Schema<IIncomeDocument>({
         required: function(this: IIncomeDocument) {
             return this.isRecurring;
         }
+    },
+    tax: {
+        type: Number
     }
 }, {
     timestamps: true

@@ -46,6 +46,7 @@ export interface BaseExpense {
     isRecurring: boolean;
     recurringFrequency?: RecurringFrequency;
     startDate?: Date | string; // Allow both Date and string for API compatibility
+    tax: Number;
 }
 
 export interface ExpenseFormData {
